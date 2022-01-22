@@ -13,7 +13,7 @@ public class GunScript : MonoBehaviour
     [SerializeField] GameObject impactEffect;
 
     [SerializeField] Camera fpsCam;
-    [SerializeField] GameObject[] thompsonShootingSound;
+    [SerializeField] GameObject[] shootingSound;
 
     // Start is called before the first frame update
 
@@ -22,7 +22,7 @@ public class GunScript : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && Time.time >= nextTimeToFire){
             nextTimeToFire = Time.time + 1/fireRate;
-            Instantiate(thompsonShootingSound[Random.Range(0, thompsonShootingSound.Length)], transform.position, Quaternion.identity);
+            Instantiate(shootingSound[Random.Range(0, shootingSound.Length)], transform.position, Quaternion.identity);
             Shoot();
         }
     }
