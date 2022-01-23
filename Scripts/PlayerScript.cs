@@ -20,6 +20,17 @@ public class PlayerScript : MonoBehaviour
     //GetComponent
     private Rigidbody rb;
     [SerializeField] CinemachineVirtualCamera cinemachineCam;
+    public GunSwitch gunSwitch;
+
+    private static PlayerScript instance;
+    public static PlayerScript Instance
+    {
+        get
+        {
+            if (instance == null) instance = GameObject.FindObjectOfType<PlayerScript>();
+            return instance;
+        }
+    }
     void Awake(){
         rb = GetComponent<Rigidbody>();
     }
@@ -28,7 +39,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float footstepTimer;
     float timeBtwFootstep;
     //[SerializeField] AudioSource jumpSound;
-
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
