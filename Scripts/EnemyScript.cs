@@ -6,15 +6,39 @@ using UnityEngine.AI;
 
 public class EnemyScript : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent agent;
-    Transform playerTransform;
-
-    void Awake(){
-        playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    [SerializeField] private float damage;
+    [SerializeField] private float delay;
+    [SerializeField] private GameObject[] playerHurt;
+    [SerializeField] private GameObject player;
+    private float damageRate;
+    private bool isDamage;
+    private NavMeshAgent agent;
+    private void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
     }
-    // Update is called once per frame
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") && isDamage)
+        {
+            PlayerScript.Instance.health -= damage;
+            Instantiate(playerHurt[Random.Range(0, playerHurt.Length)], transform.position, Quaternion.identity);
+            damageRate = delay;
+        }
+        if (collision.collider.CompareTag("Ground"))
+        {
+            agent.SetDestination(player.transform.position);
+        }
+    }
     void Update()
     {
-        agent.SetDestination(playerTransform.position);
+        if (damageRate <= 0)
+        {
+            isDamage = true;
+        } else if (damageRate > 0)
+        {
+            damageRate -= Time.deltaTime;
+            isDamage = false;
+        }
     }
 }

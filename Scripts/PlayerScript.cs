@@ -10,17 +10,27 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float jumpForce;
     [SerializeField] float downwardForce;
     float HorizontalSpeed, VerticalSpeed;
+    
 
     //Jump Check
     [SerializeField] LayerMask groundLayerMask;
     [SerializeField] float groundRadius;
     [SerializeField] Transform groundCheck;
-    bool isGround;
+    public bool isGround;
 
     //GetComponent
     private Rigidbody rb;
     [SerializeField] CinemachineVirtualCamera cinemachineCam;
     public GunSwitch gunSwitch;
+
+    //Sound
+    [SerializeField] GameObject[] footstepSound;
+    [SerializeField] float footstepTimer;
+    [SerializeField] GameObject jumpSound;
+    float timeBtwFootstep;
+
+    //Health
+    public float health;
 
     private static PlayerScript instance;
     public static PlayerScript Instance
@@ -34,11 +44,6 @@ public class PlayerScript : MonoBehaviour
     void Awake(){
         rb = GetComponent<Rigidbody>();
     }
-    //Sound
-    [SerializeField] GameObject[] footstepSound;
-    [SerializeField] float footstepTimer;
-    float timeBtwFootstep;
-    //[SerializeField] AudioSource jumpSound;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -57,7 +62,7 @@ public class PlayerScript : MonoBehaviour
 
         // SFX
         int random = Random.Range(0, footstepSound.Length);
-        if (VerticalSpeed != 0 || HorizontalSpeed != 0){
+        if (VerticalSpeed != 0 || HorizontalSpeed != 0 && isGround){
             if (timeBtwFootstep <= 0){
                 Instantiate(footstepSound[random], transform.position, Quaternion.identity);
                 timeBtwFootstep = footstepTimer;
